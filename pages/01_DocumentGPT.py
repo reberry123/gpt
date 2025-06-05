@@ -18,7 +18,7 @@ st.set_page_config(
 )
 
 @st.cache_resource(show_spinner="Embedding file...")
-def embed_file(file):
+def embed_file(file, api_key):
     file_content = file.read()
     os.makedirs(".cache/files", exist_ok=True)
     os.makedirs(".cache/embeddings", exist_ok=True)
@@ -32,7 +32,7 @@ def embed_file(file):
         chunk_size=600,
         chunk_overlap=100
     )
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=api_key)
     cache_dir = LocalFileStore(f"./.cache/embeddings/{file.name}")
     cached_embeddings = CacheBackedEmbeddings.from_bytes_store(
         embeddings, cache_dir
@@ -92,7 +92,7 @@ if file and api_key:
         temperature= 0.1,
     )
 
-    retriever = embed_file(file)
+    retriever = embed_file(file, api_key)
     chain = {
         "context": retriever | RunnableLambda(format_docs),
         "question": RunnablePassthrough(),
