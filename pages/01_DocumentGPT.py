@@ -20,8 +20,8 @@ st.set_page_config(
 @st.cache_resource(show_spinner="Embedding file...")
 def embed_file(file):
     file_content = file.read()
-    save_dir = ".cache/files"
-    os.makedirs(save_dir, exist_ok=True)
+    os.makedirs(".cache/files", exist_ok=True)
+    os.makedirs(".cache/embeddings", exist_ok=True)
     file_path = f"./.cache/files/{file.name}"
     with open(file_path, "wb") as f:
         f.write(file_content)
